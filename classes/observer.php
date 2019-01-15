@@ -28,27 +28,17 @@ class local_notifications_observer
 {
     public static function moodle_event_observed($event_observed){
         global $DB;
-
+        //error_log(print_r($event_observed), 1);
         $enabledeventsarray = explode(',', get_config("local_notifications_events")->enablenotificationsselect);
 
         if (in_array($event_observed->eventname, $enabledeventsarray)) {
 	       	$newnotification = new stdClass();
-	        $newnotification->userid = 2;
-	        $newnotification->title = 'Test';
-	        $newnotification->shortmessage = '';
+	        $newnotification->userid = $event_observed->userid;
+	        $newnotification->title = $event_observed->component;
+	        $newnotification->shortmessage = $event_observed->eventname;
 	        $newnotification->link = '';
-	        $newnotification->status = '';
+	        $newnotification->status = 0;
 	        $newnotification->timecreated = time();
-
-
-        	$t = $DB->insert_record('local_notifications', $newnotification);
         }
-
-
-
-
-        error_log(print_r($event_observed), 1);
-    
-
     }
 }

@@ -96,6 +96,9 @@ $eventsmonitored = $DB->get_records_sql("SELECT name FROM {config} WHERE name li
 foreach ($eventsmonitored as $enabledeventsarray) {
 	foreach ($enabledeventsarray as $enabledevents) {
 
+		var_dump($enabledevents);
+
+
 		$name = str_replace('\\', '_', $enabledevents);
 		$title = explode('\\', $completelist[$enabledevents]['raweventname'])[0];
 		$default = 0;
@@ -117,10 +120,10 @@ $tabledata = array();
 foreach ($completelist as $value) {
     $tabledata['local_notifications_events'.$value['eventname']] = 'local_notifications_events'.$value['eventname'];
 }
-var_dump($tabledata);
-die;
+
 $name = 'local_notifications_events/enablenotificationsselect';
 $title = 'Event';
 $setting = new admin_setting_configmultiselect($name, $title, $description, '', $tabledata);
+
 $events->add($setting);
 $ADMIN->add('local_notifications_add', $events);
