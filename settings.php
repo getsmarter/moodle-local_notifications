@@ -96,9 +96,6 @@ $eventsmonitored = $DB->get_records_sql("SELECT name FROM {config} WHERE name li
 foreach ($eventsmonitored as $enabledeventsarray) {
 	foreach ($enabledeventsarray as $enabledevents) {
 
-		var_dump($enabledevents);
-
-
 		$name = str_replace('\\', '_', $enabledevents);
 		$title = explode('\\', $completelist[$enabledevents]['raweventname'])[0];
 		$default = 0;
