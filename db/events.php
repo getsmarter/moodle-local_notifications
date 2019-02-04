@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $observers = array(
     array(
-        'eventname' => '*',
-        'callback' => 'local_notifications_observer::moodle_event_observed',
+        'eventname' => '\core\event\notification_viewed',
+        'callback' => 'local_notifications_observer::moodle_notification_event_observed',
     ),
 );
