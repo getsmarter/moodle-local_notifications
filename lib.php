@@ -23,6 +23,60 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */  
 
+
+function local_notifications_render_navbar_output(\renderer_base $renderer) {
+    global $USER, $CFG;
+
+    // Early bail out conditions.
+    if (!isloggedin() || isguestuser() || user_not_fully_set_up($USER) ||
+        get_user_preferences('auth_forcepasswordchange') ||
+        (!$USER->policyagreed && !is_siteadmin() &&
+            ($manager = new \core_privacy\local\sitepolicy\manager()) && $manager->is_defined())) {
+        return '';
+    }
+
+    $output = '';
+
+
+    // Add the notifications popover.
+        $unreadcount = count_unread_popup_notifications($USER->id);
+        $context = [
+            'userid' => $USER->id,
+            'unreadcount' => $unreadcount,
+            'urls' => [
+                'seeall' => (new moodle_url('/message/output/popup/notifications.php'))->out(),
+                'preferences' => (new moodle_url('/message/notificationpreferences.php', ['userid' => $USER->id]))->out(),
+            ],
+        ];
+        $output .= $renderer->render_from_template('theme_legend/notification_popover_local', $context);
+
+    return $output;
+}
+
+/**
+ * Count the unread notifications for a user.
+ *
+ * @param int $useridto the user id who received the notification
+ * @return int count of the unread notifications
+ * @since 3.2
+ */
+function count_unread_popup_notifications($useridto = 0) {
+    global $USER, $DB;
+
+    if (empty($useridto)) {
+        $useridto = $USER->id;
+    }
+
+    return $DB->count_records_sql(
+        "SELECT count(id)
+           FROM {notifications}
+          WHERE id IN (SELECT notificationid FROM {message_popup_notifications})
+            AND useridto = ?
+            AND (timeread is NULL OR timeread = 0)",
+        [$useridto]
+    );
+}
+
 function get_file_list($directory) {
     global $CFG;
     $directoryroot = $CFG->dirroot;

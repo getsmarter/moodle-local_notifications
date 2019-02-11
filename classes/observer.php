@@ -31,7 +31,7 @@ class local_notifications_observer
 
        	$newnotification = new stdClass();
         $newnotification->id = $event_observed->objectid;
-        $newnotification->timeread = 0;
+        $newnotification->timeread = null;
 
         try {
             $DB->update_record('notifications', $newnotification);
