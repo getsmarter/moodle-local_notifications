@@ -48,5 +48,19 @@ function xmldb_local_notifications_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2018120100, 'local', 'notifications');
     }
 
+    if ($oldversion < 2019021700) {
+
+        global $DB;
+        $dbman = $DB->get_manager();
+
+        $table = new xmldb_table('local_notifications');
+
+        if ($dbman->table_exists($table)) {
+            $dbman->delete_tables_from_xmldb_file($CFG->dirroot.'/local/notifications/db/install.xml', 'local_notifications');
+        }
+
+        upgrade_plugin_savepoint(true, 2019021700, 'local', 'notifications');
+    }
+
     return true;
 }
