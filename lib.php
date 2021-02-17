@@ -48,7 +48,6 @@ function local_notifications_render_navbar_output(\renderer_base $renderer) {
                 'preferences' => (new moodle_url('/message/notificationpreferences.php', ['userid' => $USER->id]))->out(),
             ],
         ];
-        $output .= $renderer->render_from_template('theme_legend/notification_popover_local', $context);
 
     return $output;
 }
